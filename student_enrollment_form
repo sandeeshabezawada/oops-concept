@@ -1,0 +1,110 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# Student class
+class Student:
+    def __init__(self, roll_no, name, age, address):
+        self.roll_no = roll_no
+        self.name = name
+        self.age = age
+        self.address = address
+
+# Application class
+class StudentApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Student Management System")
+        self.root.geometry("500x400")
+
+
+        self.students = []
+
+        # Create UI elements
+        self.create_widgets()
+
+    def create_widgets(self):
+        # Roll Number
+        self.roll_label = tk.Label(self.root, text="Roll Number:")
+        self.roll_label.pack()
+        self.roll_entry = tk.Entry(self.root)
+        self.roll_entry.pack()
+
+        # Name
+        self.name_label = tk.Label(self.root, text="Name:")
+        self.name_label.pack()
+        self.name_entry = tk.Entry(self.root)
+        self.name_entry.pack()
+
+        # Age
+        self.age_label = tk.Label(self.root, text="Age:")
+        self.age_label.pack()
+        self.age_entry = tk.Entry(self.root)
+        self.age_entry.pack()
+
+        # Address
+        self.address_label = tk.Label(self.root, text="Address:")
+        self.address_label.pack()
+        self.address_entry = tk.Entry(self.root)
+        self.address_entry.pack()
+
+        # Add Student Button
+        self.add_button = tk.Button(self.root, text="Add Student", command=self.add_student)
+        self.add_button.pack()
+
+        # Display Students Button
+        self.display_button = tk.Button(self.root, text="Display Students", command=self.display_students)
+        self.display_button.pack()
+
+        # Delete Student Button
+        self.delete_button = tk.Button(self.root, text="Delete Student", command=self.delete_student)
+        self.delete_button.pack()
+
+        # Output area
+        self.output_area = tk.Text(self.root, height=10, width=40)
+        self.output_area.pack()
+
+    def add_student(self):
+        # Get input data
+        roll_no = self.roll_entry.get()
+        name = self.name_entry.get()
+        age = self.age_entry.get()
+        address = self.address_entry.get()
+
+        if roll_no and name and age and address:
+            student = Student(roll_no, name, age, address)
+            self.students.append(student)
+            messagebox.showinfo("Success", "Student added successfully!")
+            self.clear_entries()
+        else:
+            messagebox.showwarning("Input Error", "Please fill all fields!")
+
+    def display_students(self):
+        self.output_area.delete(1.0, tk.END)
+        if self.students:
+            for student in self.students:
+                self.output_area.insert(tk.END, f"Roll No: {student.roll_no}\nName: {student.name}\nAge: {student.age}\nAddress: {student.address}\n\n")
+        else:
+            self.output_area.insert(tk.END, "No students to display!")
+
+    def delete_student(self):
+        roll_no = self.roll_entry.get()
+        for student in self.students:
+            if student.roll_no == roll_no:
+                self.students.remove(student)
+                messagebox.showinfo("Success", "Student deleted successfully!")
+                self.clear_entries()
+                return
+        messagebox.showwarning("Not Found", "Student with this Roll Number not found!")
+
+    def clear_entries(self):
+        self.roll_entry.delete(0, tk.END)
+        self.name_entry.delete(0, tk.END)
+        self.age_entry.delete(0, tk.END)
+        self.address_entry.delete(0, tk.END)
+
+
+# Main function to run the app
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = StudentApp(root)
+    root.mainloop()
